@@ -123,20 +123,6 @@ Además hay endpoints CRUD para cada módulo bajo `/api/estudiantes`, `/api/doce
 
 La página **Consulta de estudiante** de la aplicación web consume este mismo servicio.
 
-## Diagramas
-
-**Arquitectura en capas**
-
-![Diagrama de capas](docs/diagrama_capas.png)
-
-**Base de datos**
-
-![Diagrama de la base de datos](docs/diagrama_base_datos.png)
-
-**Diagrama de clases (Fase 1)**
-
-![Diagrama de clases](docs/diagrama_clases_matricula.png)
-
 ## Integrantes del equipo
 
 | Integrante | Carnet |

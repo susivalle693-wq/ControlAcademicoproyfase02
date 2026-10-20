@@ -132,7 +132,7 @@ La página **Consulta de estudiante** de la aplicación web consume este mismo s
 
 ### Distribución del trabajo
 
-Cada integrante desarrolló todas las capas (Datos, Negocio y Presentación) de sus módulos.
+Cada integrante desarrolló todas las capas (Datos, Negocio y Presentación).
 
 | Integrante | Responsable de |
 | --- | --- |

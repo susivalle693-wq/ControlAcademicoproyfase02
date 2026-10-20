@@ -1,0 +1,21 @@
+@model ControlAcademico.Entidades.Calificacion
+
+@{
+    ViewData["Title"] = "Eliminar calificación";
+}
+
+<h2>Eliminar calificación</h2>
+<h5 class="text-danger">¿Seguro que desea eliminar esta calificación?</h5>
+<hr />
+<dl class="row">
+    <dt class="col-sm-3">Estudiante</dt>
+    <dd class="col-sm-9">@(Model.Matricula?.Estudiante?.NombreCompleto)</dd>
+    <dt class="col-sm-3">Curso</dt>
+    <dd class="col-sm-9">@(Model.Matricula?.Curso?.Nombre)</dd>
+    <dt class="col-sm-3">Nota</dt>
+    <dd class="col-sm-9">@Model.Nota.ToString("0.00")</dd>
+</dl>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

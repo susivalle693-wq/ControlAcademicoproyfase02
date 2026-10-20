@@ -1,0 +1,18 @@
+@model ControlAcademico.Entidades.Matricula
+
+@{
+    ViewData["Title"] = "Detalle de matrícula";
+}
+
+<h2>Detalle de matrícula</h2>
+<hr />
+<dl class="row">
+    <dt class="col-sm-3">Estudiante</dt>
+    <dd class="col-sm-9">@(Model.Estudiante?.Carnet) - @(Model.Estudiante?.NombreCompleto)</dd>
+    <dt class="col-sm-3">Curso</dt>
+    <dd class="col-sm-9">@(Model.Curso?.Nombre)</dd>
+    <dt class="col-sm-3">Fecha de matrícula</dt>
+    <dd class="col-sm-9">@Model.FechaMatricula.ToString("dd/MM/yyyy")</dd>
+</dl>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+<a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>

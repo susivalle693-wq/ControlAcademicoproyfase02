@@ -1,0 +1,23 @@
+@model ControlAcademico.Entidades.Curso
+
+@{
+    ViewData["Title"] = "Eliminar curso";
+}
+
+<h2>Eliminar curso</h2>
+<h5 class="text-danger">¿Seguro que desea eliminar este curso?</h5>
+<hr />
+<dl class="row">
+    <dt class="col-sm-3">Código</dt>
+    <dd class="col-sm-9">@Model.Codigo</dd>
+    <dt class="col-sm-3">Nombre</dt>
+    <dd class="col-sm-9">@Model.Nombre</dd>
+    <dt class="col-sm-3">Descripción</dt>
+    <dd class="col-sm-9">@Model.Descripcion</dd>
+    <dt class="col-sm-3">Docente</dt>
+    <dd class="col-sm-9">@(Model.Docente?.NombreCompleto)</dd>
+</dl>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

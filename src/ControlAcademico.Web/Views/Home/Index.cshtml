@@ -1,0 +1,105 @@
+@model ControlAcademico.Negocio.DashboardResumen
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Panel de control académico</h1>
+    <a href="/swagger" class="btn btn-outline-primary btn-sm">Servicio web (Swagger)</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <a asp-controller="Estudiantes" asp-action="Index" class="text-decoration-none">
+            <div class="card border-start border-primary border-4 h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted">Estudiantes</div>
+                    <div class="display-6 text-dark">@Model.Estudiantes</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a asp-controller="Docentes" asp-action="Index" class="text-decoration-none">
+            <div class="card border-start border-success border-4 h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted">Docentes</div>
+                    <div class="display-6 text-dark">@Model.Docentes</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a asp-controller="Cursos" asp-action="Index" class="text-decoration-none">
+            <div class="card border-start border-warning border-4 h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted">Cursos</div>
+                    <div class="display-6 text-dark">@Model.Cursos</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a asp-controller="Matriculas" asp-action="Index" class="text-decoration-none">
+            <div class="card border-start border-danger border-4 h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted">Matrículas</div>
+                    <div class="display-6 text-dark">@Model.Matriculas</div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Inscritos por curso</h2>
+                @if (!Model.InscritosPorCurso.Any())
+                {
+                    <p class="text-muted mb-0">Todavía no hay cursos registrados.</p>
+                }
+                else
+                {
+                    foreach (var curso in Model.InscritosPorCurso)
+                    {
+                        var porcentaje = curso.Inscritos * 100 / Model.MayorInscripcion;
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>@curso.Curso</span>
+                                <span class="text-muted">@curso.Inscritos</span>
+                            </div>
+                            <div class="progress" role="progressbar" aria-valuenow="@porcentaje" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: @(porcentaje)%"></div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Actividad reciente</h2>
+                @if (!Model.ActividadReciente.Any())
+                {
+                    <p class="text-muted mb-0">Todavía no hay actividad registrada.</p>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var actividad in Model.ActividadReciente)
+                        {
+                            <li class="list-group-item px-0">
+                                <div>@actividad.Descripcion</div>
+                                <small class="text-muted">@actividad.Fecha.ToString("dd/MM/yyyy HH:mm")</small>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>

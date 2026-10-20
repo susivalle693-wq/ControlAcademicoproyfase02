@@ -1,0 +1,33 @@
+@model ControlAcademico.Entidades.Matricula
+
+@{
+    ViewData["Title"] = "Editar matrícula";
+}
+
+<h2>Editar matrícula</h2>
+<hr />
+<div class="row">
+  <div class="col-md-6">
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label asp-for="EstudianteId" class="form-label"></label>
+            <select asp-for="EstudianteId" asp-items="ViewBag.Estudiantes" class="form-select"><option value="">Seleccione una opción</option></select>
+            <span asp-validation-for="EstudianteId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CursoId" class="form-label"></label>
+            <select asp-for="CursoId" asp-items="ViewBag.Cursos" class="form-select"><option value="">Seleccione una opción</option></select>
+            <span asp-validation-for="CursoId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="FechaMatricula" class="form-label"></label>
+            <input asp-for="FechaMatricula" type="date" class="form-control" />
+            <span asp-validation-for="FechaMatricula" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+</div>

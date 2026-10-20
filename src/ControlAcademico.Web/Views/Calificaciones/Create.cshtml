@@ -1,0 +1,27 @@
+@model ControlAcademico.Entidades.Calificacion
+
+@{
+    ViewData["Title"] = "Registrar calificación";
+}
+
+<h2>Registrar calificación</h2>
+<hr />
+<div class="row">
+  <div class="col-md-6">
+    <form asp-action="Create" method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="MatriculaId" class="form-label"></label>
+            <select asp-for="MatriculaId" asp-items="ViewBag.Matriculas" class="form-select"><option value="">Seleccione una opción</option></select>
+            <span asp-validation-for="MatriculaId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Nota" class="form-label"></label>
+            <input asp-for="Nota" type="number" step="any" class="form-control" />
+            <span asp-validation-for="Nota" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+</div>

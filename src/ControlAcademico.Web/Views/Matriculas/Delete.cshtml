@@ -1,0 +1,21 @@
+@model ControlAcademico.Entidades.Matricula
+
+@{
+    ViewData["Title"] = "Eliminar matrícula";
+}
+
+<h2>Eliminar matrícula</h2>
+<h5 class="text-danger">¿Seguro que desea eliminar esta matrícula?</h5>
+<hr />
+<dl class="row">
+    <dt class="col-sm-3">Estudiante</dt>
+    <dd class="col-sm-9">@(Model.Estudiante?.Carnet) - @(Model.Estudiante?.NombreCompleto)</dd>
+    <dt class="col-sm-3">Curso</dt>
+    <dd class="col-sm-9">@(Model.Curso?.Nombre)</dd>
+    <dt class="col-sm-3">Fecha de matrícula</dt>
+    <dd class="col-sm-9">@Model.FechaMatricula.ToString("dd/MM/yyyy")</dd>
+</dl>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

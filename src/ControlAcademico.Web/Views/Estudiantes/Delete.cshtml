@@ -1,0 +1,25 @@
+@model ControlAcademico.Entidades.Estudiante
+
+@{
+    ViewData["Title"] = "Eliminar estudiante";
+}
+
+<h2>Eliminar estudiante</h2>
+<h5 class="text-danger">¿Seguro que desea eliminar este estudiante?</h5>
+<hr />
+<dl class="row">
+    <dt class="col-sm-3">Carnet</dt>
+    <dd class="col-sm-9">@Model.Carnet</dd>
+    <dt class="col-sm-3">Nombre</dt>
+    <dd class="col-sm-9">@Model.Nombre</dd>
+    <dt class="col-sm-3">Apellido</dt>
+    <dd class="col-sm-9">@Model.Apellido</dd>
+    <dt class="col-sm-3">Correo electrónico</dt>
+    <dd class="col-sm-9">@Model.Correo</dd>
+    <dt class="col-sm-3">Fecha de ingreso</dt>
+    <dd class="col-sm-9">@Model.FechaIngreso.ToString("dd/MM/yyyy")</dd>
+</dl>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

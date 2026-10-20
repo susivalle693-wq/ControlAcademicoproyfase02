@@ -1,0 +1,18 @@
+@model ControlAcademico.Entidades.Calificacion
+
+@{
+    ViewData["Title"] = "Detalle de calificación";
+}
+
+<h2>Detalle de calificación</h2>
+<hr />
+<dl class="row">
+    <dt class="col-sm-3">Estudiante</dt>
+    <dd class="col-sm-9">@(Model.Matricula?.Estudiante?.NombreCompleto)</dd>
+    <dt class="col-sm-3">Curso</dt>
+    <dd class="col-sm-9">@(Model.Matricula?.Curso?.Nombre)</dd>
+    <dt class="col-sm-3">Nota</dt>
+    <dd class="col-sm-9">@Model.Nota.ToString("0.00")</dd>
+</dl>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+<a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>

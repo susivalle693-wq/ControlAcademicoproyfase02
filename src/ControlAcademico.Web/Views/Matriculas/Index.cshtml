@@ -1,0 +1,38 @@
+@model IEnumerable<ControlAcademico.Entidades.Matricula>
+
+@{
+    ViewData["Title"] = "Matrículas";
+}
+
+<h2>Matrículas</h2>
+<p><a asp-action="Create" class="btn btn-primary">Registrar matrícula</a></p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Estudiante</th>
+            <th>Curso</th>
+            <th>Fecha de matrícula</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@(item.Estudiante?.Carnet) - @(item.Estudiante?.NombreCompleto)</td>
+            <td>@(item.Curso?.Nombre)</td>
+            <td>@item.FechaMatricula.ToString("dd/MM/yyyy")</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+            </td>
+        </tr>
+        }
+        @if (!Model.Any())
+        {
+        <tr><td colspan="4" class="text-muted">No hay registros.</td></tr>
+        }
+    </tbody>
+</table>

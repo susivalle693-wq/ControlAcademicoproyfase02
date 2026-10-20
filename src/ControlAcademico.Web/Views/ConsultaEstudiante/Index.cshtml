@@ -1,0 +1,154 @@
+@{
+    ViewData["Title"] = "Consulta de estudiante";
+}
+
+<h2 class="mb-3">Consulta de estudiante</h2>
+
+<form id="formConsulta" class="row g-2 mb-3" novalidate>
+    <div class="col-sm-6 col-md-4">
+        <input id="carnet" class="form-control" placeholder="Carnet (ejemplo: AB253001)" maxlength="20" autocomplete="off" />
+    </div>
+    <div class="col-auto">
+        <button id="btnConsultar" type="submit" class="btn btn-primary">Consultar</button>
+    </div>
+</form>
+
+<div id="mensaje"></div>
+
+<div id="resultado" class="d-none">
+    <div class="card mb-3">
+        <div class="card-body">
+            <h4 id="nombre" class="card-title mb-1"></h4>
+            <p id="datos" class="text-muted mb-2"></p>
+            <p class="mb-1"><strong>Estado de matrícula:</strong> <span id="estadoMatricula"></span></p>
+            <p class="mb-0"><strong>Promedio:</strong> <span id="promedio"></span></p>
+        </div>
+    </div>
+
+    <h5>Cursos y notas</h5>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Curso</th>
+                    <th>Docente</th>
+                    <th>Matrícula</th>
+                    <th>Fecha</th>
+                    <th>Nota</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="tablaCursos"></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const formulario = document.getElementById("formConsulta");
+        const campoCarnet = document.getElementById("carnet");
+        const boton = document.getElementById("btnConsultar");
+        const mensaje = document.getElementById("mensaje");
+        const resultado = document.getElementById("resultado");
+
+        function mostrarMensaje(texto, tipo) {
+            mensaje.innerHTML = "";
+            const aviso = document.createElement("div");
+            aviso.className = "alert alert-" + tipo;
+            aviso.textContent = texto;
+            mensaje.appendChild(aviso);
+        }
+
+        function celda(texto) {
+            const td = document.createElement("td");
+            td.textContent = texto;
+            return td;
+        }
+
+        function insignia(estado) {
+            const td = document.createElement("td");
+            const span = document.createElement("span");
+            const colores = { "Aprobado": "success", "Reprobado": "danger", "Pendiente": "warning text-dark" };
+            span.className = "badge bg-" + (colores[estado] || "secondary");
+            span.textContent = estado;
+            td.appendChild(span);
+            return td;
+        }
+
+        function formatoFecha(texto) {
+            const f = new Date(texto);
+            return isNaN(f) ? "" : f.toLocaleDateString("es-SV");
+        }
+
+        async function pedir(url) {
+            const respuesta = await fetch(url, { headers: { "Accept": "application/json" } });
+            const cuerpo = await respuesta.json().catch(() => null);
+            if (!respuesta.ok) {
+                const detalle = cuerpo && (cuerpo.detail || cuerpo.title);
+                throw new Error(detalle || "No se pudo consultar el servicio (código " + respuesta.status + ").");
+            }
+            return cuerpo;
+        }
+
+        formulario.addEventListener("submit", async (evento) => {
+            evento.preventDefault();
+            mensaje.innerHTML = "";
+            resultado.classList.add("d-none");
+
+            const carnet = campoCarnet.value.trim().toUpperCase();
+            if (!carnet) {
+                mostrarMensaje("Escriba el carnet del estudiante.", "warning");
+                return;
+            }
+
+            boton.disabled = true;
+            try {
+                const base = "/api/estudiantes/" + encodeURIComponent(carnet);
+                const [notas, matricula] = await Promise.all([
+                    pedir(base + "/notas"),
+                    pedir(base + "/matricula")
+                ]);
+
+                document.getElementById("nombre").textContent = notas.nombreCompleto + " (" + notas.carnet + ")";
+                document.getElementById("datos").textContent =
+                    notas.carrera + " · " + notas.correo + " · Estado académico: " + notas.estadoAcademico;
+                document.getElementById("estadoMatricula").textContent = matricula.matriculado
+                    ? "Matriculado en " + matricula.totalCursos + " curso(s)"
+                    : "Sin matrículas";
+                document.getElementById("promedio").textContent = notas.promedio === null
+                    ? "Sin notas registradas"
+                    : notas.promedio.toFixed(2);
+
+                const cuerpo = document.getElementById("tablaCursos");
+                cuerpo.innerHTML = "";
+                if (notas.cursos.length === 0) {
+                    const fila = document.createElement("tr");
+                    const td = celda("El estudiante no tiene cursos matriculados.");
+                    td.colSpan = 7;
+                    td.className = "text-muted";
+                    fila.appendChild(td);
+                    cuerpo.appendChild(fila);
+                }
+                for (const curso of notas.cursos) {
+                    const extra = matricula.cursos.find(c => c.codigoCurso === curso.codigoCurso) || {};
+                    const fila = document.createElement("tr");
+                    fila.appendChild(celda(curso.codigoCurso));
+                    fila.appendChild(celda(curso.nombreCurso));
+                    fila.appendChild(celda(extra.docente || ""));
+                    fila.appendChild(celda(extra.codigoMatricula || "-"));
+                    fila.appendChild(celda(formatoFecha(curso.fechaMatricula)));
+                    fila.appendChild(celda(curso.nota === null ? "-" : curso.nota.toFixed(2)));
+                    fila.appendChild(insignia(curso.estado));
+                    cuerpo.appendChild(fila);
+                }
+
+                resultado.classList.remove("d-none");
+            } catch (error) {
+                mostrarMensaje(error.message, "danger");
+            } finally {
+                boton.disabled = false;
+            }
+        });
+    </script>
+}

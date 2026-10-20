@@ -1,0 +1,9 @@
+# Compilación y Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Configuración local (cada quien ajusta su servidor de SQL Server aquí)
+appsettings.Development.json

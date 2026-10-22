@@ -140,3 +140,4 @@ Cada integrante desarrolló todas las capas (Datos, Negocio y Presentación).
 | Alessandra Guadalupe González Burgos | Matrículas, Calificaciones, dashboard con actividad reciente, diseño de la interfaz y documentación |
 
 Repositorio: https://github.com/susivalle693-wq/ControlAcademicoproyfase02
+##Capturas en doc/capturas :)

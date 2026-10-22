@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
 
 namespace ControlAcademico.Migrations
 {
-    /// <inheritdoc />
     public partial class Validaciones : Migration
     {
         /// <inheritdoc />
@@ -125,7 +123,6 @@ namespace ControlAcademico.Migrations
                 unique: true);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(

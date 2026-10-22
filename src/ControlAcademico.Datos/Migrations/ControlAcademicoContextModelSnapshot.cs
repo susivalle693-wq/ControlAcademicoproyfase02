@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-#nullable disable
-
 namespace ControlAcademico.Migrations
 {
     [DbContext(typeof(ControlAcademicoContext))]
@@ -15,7 +13,6 @@ namespace ControlAcademico.Migrations
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
-#pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.32")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
@@ -329,7 +326,6 @@ namespace ControlAcademico.Migrations
                 {
                     b.Navigation("Calificaciones");
                 });
-#pragma warning restore 612, 618
         }
     }
 }

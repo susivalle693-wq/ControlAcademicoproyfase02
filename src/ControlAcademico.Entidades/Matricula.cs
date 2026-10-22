@@ -7,7 +7,6 @@ namespace ControlAcademico.Entidades
     {
         public int Id { get; set; }
 
-        // Lo genera Negocio (MAT253-001, MAT253-002...). Es nulo hasta que Persona B implemente la generación.
         [StringLength(20)]
         [Display(Name = "Código de matrícula")]
         public string? CodigoMatricula { get; set; }

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlAcademico.Negocio
 {
-    // Contrato de Negocio para calificaciones (la capa Web solo usa esta interfaz).
     public interface ICalificacionServicio
     {
         Task<List<Calificacion>> ListarAsync(string? buscar = null, int? cursoId = null);
@@ -132,18 +131,17 @@ namespace ControlAcademico.Negocio
                 "No se pudo eliminar la calificación.");
         }
 
-        // Validaciones de negocio: rango de la nota, matrícula existente y una sola nota por matrícula.
         private async Task<Resultado> ValidarAsync(Calificacion c)
         {
             var resultado = new Resultado();
 
-            // 1) La nota debe ser un número entre 0 y 10.
+           
             if (double.IsNaN(c.Nota) || double.IsInfinity(c.Nota) || c.Nota < 0 || c.Nota > 10)
             {
                 resultado.Agregar(nameof(Calificacion.Nota), "La nota debe estar entre 0 y 10.");
             }
 
-            // 2) La matrícula debe estar seleccionada, existir y no tener ya una nota.
+            
             if (c.MatriculaId <= 0)
             {
                 resultado.Agregar(nameof(Calificacion.MatriculaId), "Debe seleccionar una matrícula.");

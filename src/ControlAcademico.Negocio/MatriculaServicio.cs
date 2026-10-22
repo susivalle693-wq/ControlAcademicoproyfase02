@@ -26,7 +26,6 @@ namespace ControlAcademico.Negocio
             _contexto = contexto;
         }
 
-        // Prefijo del código autogenerado: MAT253-001, MAT253-002...
         private const string PrefijoCodigo = "MAT253-";
 
         public async Task<List<Matricula>> ListarAsync(string? buscar = null)
@@ -142,7 +141,7 @@ namespace ControlAcademico.Negocio
         {
             var resultado = new Resultado();
 
-            // 1) El estudiante debe estar seleccionado y existir en la base de datos.
+            // El estudiante debe estar seleccionado y existir en la base de datos.
             if (m.EstudianteId <= 0)
             {
                 resultado.Agregar(nameof(Matricula.EstudianteId), "Debe seleccionar un estudiante.");
@@ -152,7 +151,7 @@ namespace ControlAcademico.Negocio
                 resultado.Agregar(nameof(Matricula.EstudianteId), "El estudiante seleccionado no existe.");
             }
 
-            // 2) El curso debe estar seleccionado y existir.
+            //El curso debe estar seleccionado y existir.
             if (m.CursoId <= 0)
             {
                 resultado.Agregar(nameof(Matricula.CursoId), "Debe seleccionar un curso.");
@@ -162,13 +161,13 @@ namespace ControlAcademico.Negocio
                 resultado.Agregar(nameof(Matricula.CursoId), "El curso seleccionado no existe.");
             }
 
-            // 3) La fecha es obligatoria.
+            // La fecha es obligatoria.
             if (m.FechaMatricula == default)
             {
                 resultado.Agregar(nameof(Matricula.FechaMatricula), "El campo Fecha de matrícula es obligatorio.");
             }
 
-            // 4) Un estudiante no puede matricularse dos veces en el mismo curso.
+            // Un estudiante no puede matricularse dos veces en el mismo curso.
             if (resultado.Exitoso
                 && await _contexto.Matriculas.AnyAsync(x => x.Id != m.Id
                     && x.EstudianteId == m.EstudianteId && x.CursoId == m.CursoId))
@@ -176,7 +175,7 @@ namespace ControlAcademico.Negocio
                 resultado.Agregar(string.Empty, "El estudiante ya está matriculado en este curso.");
             }
 
-            // Regla de cupo (se excluye la propia matrícula para que editar no cuente doble): no se puede matricular en un curso que ya llegó a su cupo máximo.
+          
             if (resultado.Exitoso)
             {
                 var cupoMaximo = await _contexto.Cursos

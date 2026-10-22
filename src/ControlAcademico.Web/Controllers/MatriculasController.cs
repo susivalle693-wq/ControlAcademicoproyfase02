@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ControlAcademico.Controllers
 {
+    // Controlador de presentación de matrículas: usa solo servicios de Negocio.
     public class MatriculasController : Controller
     {
         private readonly IMatriculaServicio _servicio;
@@ -18,11 +19,14 @@ namespace ControlAcademico.Controllers
             _cursos = cursos;
         }
 
-        public async Task<IActionResult> Index()
+        // Historial de matrículas con buscador (código, carnet, estudiante o curso).
+        public async Task<IActionResult> Index(string? buscar)
         {
-            return View(await _servicio.ListarAsync());
+            ViewBag.Buscar = buscar;
+            return View(await _servicio.ListarAsync(buscar));
         }
 
+        // Muestra el detalle de un registro; si el id no existe devuelve 404.
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -31,12 +35,14 @@ namespace ControlAcademico.Controllers
             return View(item);
         }
 
+        // GET: muestra el formulario vacío para registrar un nuevo elemento.
         public async Task<IActionResult> Create()
         {
             await CargarListasAsync();
             return View(new Matricula { FechaMatricula = DateTime.Today });
         }
 
+        // POST: recibe el formulario. Primero valida con ModelState (reglas de las entidades) y luego con el servicio de Negocio (reglas del sistema). Solo se enlazan los campos permitidos con [Bind] para evitar el sobre-envío de datos.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EstudianteId,CursoId,FechaMatricula")] Matricula matricula)
@@ -55,6 +61,7 @@ namespace ControlAcademico.Controllers
             return View(matricula);
         }
 
+        // GET: carga el registro existente en el formulario de edición.
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -64,6 +71,7 @@ namespace ControlAcademico.Controllers
             return View(item);
         }
 
+        // POST: guarda los cambios; los errores de Negocio se agregan al ModelState para mostrarlos junto al campo.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,EstudianteId,CursoId,FechaMatricula")] Matricula matricula)
@@ -85,6 +93,7 @@ namespace ControlAcademico.Controllers
             return View(matricula);
         }
 
+        // GET: página de confirmación de eliminación (respaldo cuando no hay JavaScript; con JavaScript se usa el modal).
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -93,6 +102,7 @@ namespace ControlAcademico.Controllers
             return View(item);
         }
 
+        // POST: elimina el registro. Si Negocio lo bloquea (por ejemplo, tiene datos relacionados) se muestra el mensaje con TempData["Error"].
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -109,6 +119,7 @@ namespace ControlAcademico.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Llena las listas desplegables del formulario (ViewBag) usando servicios de Negocio.
         private async Task CargarListasAsync()
         {
             var estudiantes = await _estudiantes.ListarAsync();

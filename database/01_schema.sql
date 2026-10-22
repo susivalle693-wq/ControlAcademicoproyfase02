@@ -1,12 +1,3 @@
-/* =====================================================================
-   Control Académico - Fase 2
-   01_schema.sql : crea la base de datos y las 6 tablas.
-
-   Usar ESTE script o "dotnet ef database update", pero no los dos sobre
-   la misma base de datos (el script no crea __EFMigrationsHistory).
-   El nombre de la base coincide con la cadena de conexión "Default" de
-   src/ControlAcademico.Web/appsettings.json.
-   ===================================================================== */
 IF DB_ID(N'ControlAcademico') IS NULL
     CREATE DATABASE ControlAcademico;
 GO

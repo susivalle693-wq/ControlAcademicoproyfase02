@@ -8,7 +8,10 @@
 <hr />
 <div class="row">
   <div class="col-md-6">
-    <form asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>
+    <div class="card seccion-formulario">
+    @* Formulario (pantalla tipo FORMULARIO). novalidate desactiva la validación del navegador para usar jQuery Validation (cliente) y ModelState (servidor); data-guardar deshabilita el botón mientras se envía. *@
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate data-guardar>
+        @* Muestra los errores generales (por ejemplo, "ya está matriculado en este curso"). *@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <div class="mb-3">
@@ -46,8 +49,14 @@
             <input asp-for="FechaNacimiento" type="date" class="form-control" />
             <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle"></i> Guardar</button>
         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
     </form>
+    </div>
   </div>
 </div>
+
+@* Carga jQuery Validation para mostrar los errores debajo de cada campo sin recargar la página. *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

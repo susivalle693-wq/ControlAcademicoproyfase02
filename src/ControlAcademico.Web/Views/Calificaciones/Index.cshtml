@@ -4,35 +4,60 @@
     ViewData["Title"] = "Calificaciones";
 }
 
-<h2>Calificaciones</h2>
-<p><a asp-action="Create" class="btn btn-primary">Registrar calificación</a></p>
+@* Encabezado de la pantalla: título y botón para registrar un nuevo elemento (pantalla tipo LISTADO). *@
+<div class="barra-herramientas">
+    <h2 class="mb-0">Calificaciones</h2>
+    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Registrar calificación</a>
+</div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Estudiante</th>
-            <th>Curso</th>
-            <th>Nota</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+@* Buscador/filtro: envía los datos por GET; el controlador los pasa al servicio de Negocio, que filtra con LINQ. *@
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-sm-6 col-md-4">
+        <input type="search" name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Buscar por estudiante o carnet" />
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <select name="cursoId" asp-items="ViewBag.Cursos" class="form-select"><option value="">Todos los cursos</option></select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-funnel"></i> Filtrar</button>
+        @if (!string.IsNullOrWhiteSpace((string?)ViewBag.Buscar) || ViewBag.CursoId != null)
         {
-        <tr>
-            <td>@(item.Matricula?.Estudiante?.NombreCompleto)</td>
-            <td>@(item.Matricula?.Curso?.Nombre)</td>
-            <td>@item.Nota.ToString("0.00")</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
-            </td>
-        </tr>
+            <a asp-action="Index" class="btn btn-secondary">Limpiar</a>
         }
-        @if (!Model.Any())
-        {
-        <tr><td colspan="4" class="text-muted">No hay registros.</td></tr>
-        }
-    </tbody>
-</table>
+    </div>
+</form>
+
+@* Tabla del listado. data-paginar="10" le indica a site.js que muestre 10 filas por página. *@
+<div class="tabla-wrap">
+    <table class="table align-middle" data-paginar="10">
+        <thead>
+            <tr>
+                <th>Estudiante</th>
+                <th>Curso</th>
+                <th>Nota</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @* Una fila por registro. Los botones de editar, ver y eliminar vienen del parcial _Acciones. *@
+            @foreach (var item in Model)
+            {
+                var nombreFila = "la nota de " + item.Matricula?.Estudiante?.NombreCompleto;
+                <tr>
+                    <td>@(item.Matricula?.Estudiante?.Carnet) - @(item.Matricula?.Estudiante?.NombreCompleto)</td>
+                    <td>@(item.Matricula?.Curso?.Nombre)</td>
+                    <td><strong>@item.Nota.ToString("0.00")</strong></td>
+                    @* El estado se calcula con la nota mínima definida una sola vez en ReglasAcademicas. *@
+                    <td><partial name="_Estado" model="ControlAcademico.Negocio.ReglasAcademicas.ObtenerEstado(item.Nota)" /></td>
+                    <td><partial name="_Acciones" model="new ControlAcademico.Models.AccionesFila(item.Id, nombreFila)" /></td>
+                </tr>
+            }
+            @* Mensaje cuando no hay registros o la búsqueda no encontró resultados. *@
+            @if (!Model.Any())
+            {
+                <tr><td colspan="5" class="text-muted">@(string.IsNullOrWhiteSpace((string?)ViewBag.Buscar) && ViewBag.CursoId == null ? "No hay registros." : "No se encontraron resultados para la búsqueda.")</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -4,66 +4,66 @@
     ViewData["Title"] = "Detalle del curso";
 }
 
-<h2>Detalle del curso</h2>
-<hr />
-<dl class="row">
-    <dt class="col-sm-3">Código</dt>
-    <dd class="col-sm-9">@Model.Codigo</dd>
-    <dt class="col-sm-3">Nombre</dt>
-    <dd class="col-sm-9">@Model.Nombre</dd>
-    <dt class="col-sm-3">Descripción</dt>
-    <dd class="col-sm-9">@Model.Descripcion</dd>
-    <dt class="col-sm-3">Docente</dt>
-    <dd class="col-sm-9">@Model.DocenteNombre</dd>
-    <dt class="col-sm-3">Correo del docente</dt>
-    <dd class="col-sm-9">@Model.DocenteCorreo</dd>
-    <dt class="col-sm-3">Especialidad</dt>
-    <dd class="col-sm-9">@Model.DocenteEspecialidad</dd>
-    <dt class="col-sm-3">Créditos</dt>
-    <dd class="col-sm-9">@Model.Creditos</dd>
-    <dt class="col-sm-3">Cupo máximo</dt>
-    <dd class="col-sm-9">@Model.CupoMaximo</dd>
-    <dt class="col-sm-3">Cupos disponibles</dt>
-    <dd class="col-sm-9">@Model.CuposDisponibles</dd>
-    <dt class="col-sm-3">Estudiantes matriculados</dt>
-    <dd class="col-sm-9">@Model.TotalEstudiantes</dd>
-    <dt class="col-sm-3">Promedio general</dt>
-    <dd class="col-sm-9">@(Model.PromedioGeneral?.ToString("0.00") ?? "Sin notas registradas")</dd>
-</dl>
+@* Pantalla tipo DETALLE: información del curso, cupo y estudiantes matriculados. *@
+<div class="barra-herramientas">
+    <h2 class="mb-0">Detalle del curso</h2>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="bi bi-pencil"></i> Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+    </div>
+</div>
 
-<h4>Estudiantes matriculados</h4>
+<div class="card seccion-formulario">
+    <div class="titulo"><i class="bi bi-journal-bookmark"></i> @Model.Codigo - @Model.Nombre</div>
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Descripción</dt>
+        <dd class="col-sm-9">@Model.Descripcion</dd>
+        <dt class="col-sm-3">Docente</dt>
+        <dd class="col-sm-9">@Model.DocenteNombre (@Model.DocenteEspecialidad)</dd>
+        <dt class="col-sm-3">Correo del docente</dt>
+        <dd class="col-sm-9">@Model.DocenteCorreo</dd>
+        <dt class="col-sm-3">Créditos</dt>
+        <dd class="col-sm-9">@Model.Creditos</dd>
+        <dt class="col-sm-3">Cupo</dt>
+        <dd class="col-sm-9">@Model.TotalEstudiantes de @Model.CupoMaximo ocupados (@Model.CuposDisponibles disponibles)</dd>
+        <dt class="col-sm-3">Promedio general</dt>
+        <dd class="col-sm-9">@(Model.PromedioGeneral?.ToString("0.00") ?? "Sin notas registradas")</dd>
+    </dl>
+</div>
+
+<h4 class="mb-3">Estudiantes matriculados</h4>
+@* Si nadie se ha matriculado se muestra un mensaje; si no, la tabla de inscritos. *@
 @if (Model.Estudiantes.Count == 0)
 {
     <p class="text-muted">Este curso aún no tiene estudiantes matriculados.</p>
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Carnet</th>
-                <th>Estudiante</th>
-                <th>Correo</th>
-                <th>Fecha de matrícula</th>
-                <th>Notas</th>
-                <th>Promedio</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Estudiantes)
-            {
+    <div class="tabla-wrap">
+        <table class="table align-middle" data-paginar="10">
+            <thead>
                 <tr>
-                    <td>@item.Carnet</td>
-                    <td>@item.NombreCompleto</td>
-                    <td>@item.Correo</td>
-                    <td>@item.FechaMatricula.ToString("dd/MM/yyyy")</td>
-                    <td>@item.TotalNotas</td>
-                    <td>@(item.Promedio?.ToString("0.00") ?? "-")</td>
+                    <th>Carnet</th>
+                    <th>Estudiante</th>
+                    <th>Correo</th>
+                    <th>Fecha de matrícula</th>
+                    <th>Notas</th>
+                    <th>Promedio</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Estudiantes)
+                {
+                    <tr>
+                        <td><strong>@item.Carnet</strong></td>
+                        <td>@item.NombreCompleto</td>
+                        <td>@item.Correo</td>
+                        <td>@item.FechaMatricula.ToString("dd/MM/yyyy")</td>
+                        <td>@item.TotalNotas</td>
+                        <td>@(item.Promedio?.ToString("0.00") ?? "-")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
-
-<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
-<a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>

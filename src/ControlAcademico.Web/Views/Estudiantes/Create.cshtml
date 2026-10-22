@@ -7,9 +7,13 @@
 <h2>Registrar estudiante</h2>
 <hr />
 <div class="row">
-  <div class="col-md-6">
-    <form asp-action="Create" method="post" novalidate>
+  <div class="col-lg-8">
+    @* Formulario (pantalla tipo FORMULARIO). novalidate desactiva la validación del navegador para usar jQuery Validation (cliente) y ModelState (servidor); data-guardar deshabilita el botón mientras se envía. *@
+    <form asp-action="Create" method="post" novalidate data-guardar>
+        @* Muestra los errores generales (por ejemplo, "ya está matriculado en este curso"). *@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card seccion-formulario">
+            <div class="titulo"><i class="bi bi-person-vcard"></i> Datos personales</div>
         <div class="mb-3">
             <label asp-for="Carnet" class="form-label"></label>
             <input asp-for="Carnet" class="form-control" />
@@ -31,11 +35,6 @@
             <span asp-validation-for="Correo" class="text-danger"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="FechaIngreso" class="form-label"></label>
-            <input asp-for="FechaIngreso" type="date" class="form-control" />
-            <span asp-validation-for="FechaIngreso" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
             <label asp-for="Telefono" class="form-label"></label>
             <input asp-for="Telefono" placeholder="0000-0000" class="form-control" />
             <span asp-validation-for="Telefono" class="text-danger"></span>
@@ -44,6 +43,14 @@
             <label asp-for="FechaNacimiento" class="form-label"></label>
             <input asp-for="FechaNacimiento" type="date" class="form-control" />
             <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+        </div>
+        </div>
+        <div class="card seccion-formulario">
+            <div class="titulo"><i class="bi bi-mortarboard"></i> Datos académicos</div>
+        <div class="mb-3">
+            <label asp-for="FechaIngreso" class="form-label"></label>
+            <input asp-for="FechaIngreso" type="date" class="form-control" />
+            <span asp-validation-for="FechaIngreso" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Carrera" class="form-label"></label>
@@ -80,8 +87,14 @@
             <input asp-for="CreditosAprobados" type="number" min="0" class="form-control" />
             <span asp-validation-for="CreditosAprobados" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle"></i> Guardar</button>
         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
     </form>
   </div>
 </div>
+
+@* Carga jQuery Validation para mostrar los errores debajo de cada campo sin recargar la página. *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

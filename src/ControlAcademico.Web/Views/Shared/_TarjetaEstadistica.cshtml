@@ -1,0 +1,13 @@
+﻿@* Tarjeta de estadística del dashboard: título, valor, ícono y enlace al listado correspondiente. *@
+@model ControlAcademico.Models.TarjetaEstadistica
+<a asp-controller="@Model.Controlador" asp-action="Index" class="text-decoration-none">
+    <div class="card tarjeta-estadistica @Model.ClaseBorde h-100">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <div class="etiqueta">@Model.Titulo</div>
+                <div class="valor">@Model.Valor</div>
+            </div>
+            <i class="bi @Model.Icono icono" aria-hidden="true"></i>
+        </div>
+    </div>
+</a>

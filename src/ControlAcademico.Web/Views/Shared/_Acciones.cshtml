@@ -1,0 +1,7 @@
+﻿@* Botones de ícono de cada fila: editar, ver detalle y eliminar (el eliminar abre el modal de confirmación). *@
+@model ControlAcademico.Models.AccionesFila
+<div class="acciones">
+    <a class="btn btn-icono" asp-action="Edit" asp-route-id="@Model.Id" title="Editar" aria-label="Editar"><i class="bi bi-pencil"></i></a>
+    <a class="btn btn-icono" asp-action="Details" asp-route-id="@Model.Id" title="Ver detalle" aria-label="Ver detalle"><i class="bi bi-eye"></i></a>
+    <a class="btn btn-icono eliminar" asp-action="Delete" asp-route-id="@Model.Id" data-eliminar="@Model.Nombre" title="Eliminar" aria-label="Eliminar"><i class="bi bi-trash3"></i></a>
+</div>

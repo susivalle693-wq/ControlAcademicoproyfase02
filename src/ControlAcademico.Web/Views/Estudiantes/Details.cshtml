@@ -1,38 +1,85 @@
 @model ControlAcademico.Entidades.Estudiante
 
 @{
-    ViewData["Title"] = "Detalle de estudiante";
+    ViewData["Title"] = "Ficha de estudiante";
+    var notas = ViewBag.Notas as ControlAcademico.Negocio.NotasEstudianteDto;
 }
 
-<h2>Detalle de estudiante</h2>
-<hr />
-<dl class="row">
-    <dt class="col-sm-3">Carnet</dt>
-    <dd class="col-sm-9">@Model.Carnet</dd>
-    <dt class="col-sm-3">Nombre</dt>
-    <dd class="col-sm-9">@Model.Nombre</dd>
-    <dt class="col-sm-3">Apellido</dt>
-    <dd class="col-sm-9">@Model.Apellido</dd>
-    <dt class="col-sm-3">Correo electrónico</dt>
-    <dd class="col-sm-9">@Model.Correo</dd>
-    <dt class="col-sm-3">Fecha de ingreso</dt>
-    <dd class="col-sm-9">@Model.FechaIngreso.ToString("dd/MM/yyyy")</dd>
-    <dt class="col-sm-3">Teléfono</dt>
-    <dd class="col-sm-9">@(Model.Telefono ?? "-")</dd>
-    <dt class="col-sm-3">Fecha de nacimiento</dt>
-    <dd class="col-sm-9">@Model.FechaNacimiento.ToString("dd/MM/yyyy")</dd>
-    <dt class="col-sm-3">Carrera</dt>
-    <dd class="col-sm-9">@Model.Carrera</dd>
-    <dt class="col-sm-3">Facultad</dt>
-    <dd class="col-sm-9">@Model.Facultad</dd>
-    <dt class="col-sm-3">Ciclo actual</dt>
-    <dd class="col-sm-9">@Model.CicloActual</dd>
-    <dt class="col-sm-3">CUM</dt>
-    <dd class="col-sm-9">@Model.CUM.ToString("0.00")</dd>
-    <dt class="col-sm-3">Estado académico</dt>
-    <dd class="col-sm-9">@Model.EstadoAcademico</dd>
-    <dt class="col-sm-3">Créditos aprobados</dt>
-    <dd class="col-sm-9">@Model.CreditosAprobados</dd>
-</dl>
-<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
-<a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+@* Pantalla tipo DETALLE: ficha del estudiante con sus datos y, a la derecha, sus cursos, notas y promedio. *@
+<div class="barra-herramientas">
+    <h2 class="mb-0">Ficha de estudiante</h2>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="bi bi-pencil"></i> Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card seccion-formulario h-100">
+            <div class="titulo"><i class="bi bi-person-vcard"></i> @Model.NombreCompleto</div>
+            <dl class="row mb-0">
+                <dt class="col-sm-5">Carnet</dt>
+                <dd class="col-sm-7">@Model.Carnet</dd>
+                <dt class="col-sm-5">Correo electrónico</dt>
+                <dd class="col-sm-7">@Model.Correo</dd>
+                <dt class="col-sm-5">Teléfono</dt>
+                <dd class="col-sm-7">@(Model.Telefono ?? "-")</dd>
+                <dt class="col-sm-5">Fecha de nacimiento</dt>
+                <dd class="col-sm-7">@Model.FechaNacimiento.ToString("dd/MM/yyyy")</dd>
+                <dt class="col-sm-5">Fecha de ingreso</dt>
+                <dd class="col-sm-7">@Model.FechaIngreso.ToString("dd/MM/yyyy")</dd>
+                <dt class="col-sm-5">Carrera</dt>
+                <dd class="col-sm-7">@Model.Carrera</dd>
+                <dt class="col-sm-5">Facultad</dt>
+                <dd class="col-sm-7">@Model.Facultad</dd>
+                <dt class="col-sm-5">Ciclo actual</dt>
+                <dd class="col-sm-7">@Model.CicloActual</dd>
+                <dt class="col-sm-5">CUM</dt>
+                <dd class="col-sm-7">@Model.CUM.ToString("0.00")</dd>
+                <dt class="col-sm-5">Estado académico</dt>
+                <dd class="col-sm-7"><partial name="_Estado" model="Model.EstadoAcademico" /></dd>
+                <dt class="col-sm-5">Créditos aprobados</dt>
+                <dd class="col-sm-7">@Model.CreditosAprobados</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card seccion-formulario h-100">
+            <div class="titulo"><i class="bi bi-award"></i> Cursos y notas</div>
+            @* Las notas vienen del servicio de consulta de Negocio (el mismo que usa el servicio web). *@
+            @if (notas == null || notas.Cursos.Count == 0)
+            {
+                <p class="text-muted mb-0">Este estudiante todavía no está matriculado en ningún curso.</p>
+            }
+            else
+            {
+                <div class="d-flex flex-wrap gap-3 mb-3">
+                    <span>Promedio: <strong>@(notas.Promedio?.ToString("0.00") ?? "-")</strong></span>
+                    <span>Aprobados: <strong>@notas.Aprobados</strong></span>
+                    <span>Reprobados: <strong>@notas.Reprobados</strong></span>
+                    <span>Pendientes: <strong>@notas.Pendientes</strong></span>
+                </div>
+                <div class="tabla-wrap">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr><th>Curso</th><th>Créditos</th><th>Nota</th><th>Estado</th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var curso in notas.Cursos)
+                            {
+                                <tr>
+                                    <td>@curso.CodigoCurso - @curso.NombreCurso</td>
+                                    <td>@curso.Creditos</td>
+                                    <td>@(curso.Nota?.ToString("0.00") ?? "-")</td>
+                                    @* Insignia de estado: siempre muestra texto además del color. *@
+                                    <td><partial name="_Estado" model="curso.Estado" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

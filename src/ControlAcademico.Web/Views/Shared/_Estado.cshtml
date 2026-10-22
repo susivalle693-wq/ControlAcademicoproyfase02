@@ -1,0 +1,13 @@
+﻿@* Insignia de estado: siempre lleva texto además del color. Modelo: el texto del estado (Aprobado, Reprobado, Pendiente, Activo, Inactivo, Egresado). *@
+@model string
+@{
+    var clase = (Model ?? string.Empty).ToLowerInvariant();
+    var icono = clase switch
+    {
+        "aprobado" or "activo" => "bi-check-circle-fill",
+        "reprobado" or "inactivo" => "bi-x-circle-fill",
+        "pendiente" => "bi-hourglass-split",
+        _ => "bi-circle-fill"
+    };
+}
+<span class="@("insignia insignia-" + clase)"><i class="bi @icono" aria-hidden="true"></i> @Model</span>

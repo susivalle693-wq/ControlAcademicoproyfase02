@@ -1,22 +1,473 @@
+/* =====================================================================
+   Control Académico - Fase 2 · Diseño v2
+   Paleta: verde azulado #0F766E / oscuro #134E4A / acento ámbar #F59E0B
+   Tipografía: Poppins (títulos) e Inter (texto)
+   ===================================================================== */
+:root {
+    --color-primario: #0F766E;
+    --color-primario-oscuro: #134E4A;
+    --color-acento: #F59E0B;
+    --color-fondo: #F6F7F4;
+    --color-texto: #1F2937;
+    --color-suave: #6B7280;
+    --color-borde: #E3E6E0;
+    --estado-aprobado: #16A34A;
+    --estado-reprobado: #DC2626;
+    --estado-pendiente: #F59E0B;
+    --radio: 14px;
+    --sombra: 0 2px 10px rgba(19, 78, 74, .08);
+    --alto-barra: 64px;
+}
+
 html {
-  font-size: 14px;
+    font-size: 15px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    padding-top: var(--alto-barra);
+    margin-bottom: 70px;
 }
+
+h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5, .navbar-brand {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    color: var(--color-primario-oscuro);
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--color-primario);
+}
+
+    a:hover {
+        color: var(--color-primario-oscuro);
+    }
+
+/* ---------- Barra superior fija ---------- */
+.barra-superior {
+    background: var(--color-primario-oscuro);
+    min-height: var(--alto-barra);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .18);
+}
+
+    .barra-superior .navbar-brand {
+        color: #fff;
+        font-size: 1.15rem;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
+        .barra-superior .navbar-brand .bi {
+            color: var(--color-acento);
+            font-size: 1.4rem;
+        }
+
+    .barra-superior .nav-link {
+        color: rgba(255, 255, 255, .78);
+        font-weight: 500;
+        padding: .5rem .85rem;
+        border-bottom: 3px solid transparent;
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+    }
+
+        .barra-superior .nav-link:hover {
+            color: #fff;
+        }
+
+        .barra-superior .nav-link.active {
+            color: #fff;
+            border-bottom-color: var(--color-acento); /* menú activo subrayado */
+        }
+
+    .barra-superior .navbar-toggler {
+        border-color: rgba(255, 255, 255, .5);
+    }
+
+    .barra-superior .navbar-toggler-icon {
+        filter: invert(1);
+    }
+
+@media (max-width: 991.98px) {
+    .barra-superior .navbar-collapse {
+        padding-bottom: .75rem;
+    }
+
+    .barra-superior .nav-link {
+        border-bottom: 0;
+        border-left: 3px solid transparent;
+    }
+
+        .barra-superior .nav-link.active {
+            border-left-color: var(--color-acento);
+        }
+}
+
+/* ---------- Tarjetas ---------- */
+.card {
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    background: #fff;
+}
+
+.tarjeta-estadistica {
+    border-left: 6px solid var(--color-primario);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+    .tarjeta-estadistica:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(19, 78, 74, .15);
+    }
+
+    .tarjeta-estadistica .valor {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: var(--color-texto);
+        line-height: 1.1;
+    }
+
+    .tarjeta-estadistica .etiqueta {
+        color: var(--color-suave);
+        font-weight: 500;
+    }
+
+    .tarjeta-estadistica .icono {
+        font-size: 2rem;
+        opacity: .85;
+    }
+
+.borde-estudiantes {
+    border-left-color: var(--color-primario);
+}
+
+.borde-docentes {
+    border-left-color: #0EA5E9;
+}
+
+.borde-cursos {
+    border-left-color: var(--color-acento);
+}
+
+.borde-matriculas {
+    border-left-color: #7C3AED;
+}
+
+.borde-estudiantes .icono {
+    color: var(--color-primario);
+}
+
+.borde-docentes .icono {
+    color: #0EA5E9;
+}
+
+.borde-cursos .icono {
+    color: var(--color-acento);
+}
+
+.borde-matriculas .icono {
+    color: #7C3AED;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: var(--color-primario);
+    border-color: var(--color-primario);
+}
+
+    .btn-primary:hover, .btn-primary:focus {
+        background: var(--color-primario-oscuro);
+        border-color: var(--color-primario-oscuro);
+    }
+
+.btn-outline-primary {
+    color: var(--color-primario);
+    border-color: var(--color-primario);
+}
+
+    .btn-outline-primary:hover {
+        background: var(--color-primario);
+        border-color: var(--color-primario);
+    }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--color-texto);
+    border-color: var(--color-borde);
+}
+
+    .btn-secondary:hover {
+        background: #eef0ea;
+        color: var(--color-texto);
+        border-color: var(--color-borde);
+    }
+
+.btn-danger {
+    background: var(--estado-reprobado);
+    border-color: var(--estado-reprobado);
+}
+
+.btn:focus, .btn:active:focus, .form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 .2rem rgba(15, 118, 110, .25);
+    border-color: var(--color-primario);
+}
+
+.btn-icono {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-borde);
+    background: #fff;
+    color: var(--color-primario);
+}
+
+    .btn-icono:hover {
+        background: var(--color-primario);
+        color: #fff;
+        border-color: var(--color-primario);
+    }
+
+    .btn-icono.eliminar {
+        color: var(--estado-reprobado);
+    }
+
+        .btn-icono.eliminar:hover {
+            background: var(--estado-reprobado);
+            color: #fff;
+            border-color: var(--estado-reprobado);
+        }
+
+/* ---------- Tablas ---------- */
+.tabla-wrap {
+    background: #fff;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    overflow-x: auto;
+}
+
+.table {
+    margin-bottom: 0;
+    --bs-table-striped-bg: transparent;
+}
+
+    .table thead th {
+        background: #EEF4F2;
+        color: var(--color-primario-oscuro);
+        font-size: .8rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        border-bottom: 2px solid var(--color-borde);
+        white-space: nowrap;
+    }
+
+    .table tbody tr:hover {
+        background: #F1F8F6;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+.acciones {
+    white-space: nowrap;
+    text-align: right;
+}
+
+    .acciones .btn-icono + .btn-icono {
+        margin-left: .25rem;
+    }
+
+/* ---------- Insignias de estado (siempre con texto) ---------- */
+.insignia {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.insignia-aprobado, .insignia-activo {
+    background: var(--estado-aprobado);
+}
+
+.insignia-reprobado, .insignia-inactivo {
+    background: var(--estado-reprobado);
+}
+
+.insignia-pendiente {
+    background: var(--estado-pendiente);
+    color: #1F2937;
+}
+
+.insignia-egresado {
+    background: #0EA5E9;
+}
+
+/* ---------- Formularios ---------- */
+.seccion-formulario {
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+    .seccion-formulario > .titulo {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        color: var(--color-primario-oscuro);
+        margin-bottom: 1rem;
+        padding-bottom: .5rem;
+        border-bottom: 2px solid var(--color-borde);
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
+.form-label {
+    font-weight: 500;
+    font-size: .9rem;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    border-color: #cfd5cc;
+}
+
+.field-validation-error, .text-danger {
+    color: var(--estado-reprobado) !important;
+    font-size: .85rem;
+}
+
+.input-validation-error {
+    border-color: var(--estado-reprobado) !important;
+}
+
+/* ---------- Detalle (lista descriptiva) ---------- */
+dl.row dt {
+    color: var(--color-suave);
+    font-weight: 500;
+}
+
+dl.row dd {
+    font-weight: 500;
+}
+
+/* ---------- Toasts y modal ---------- */
+.contenedor-toasts {
+    z-index: 1100;
+}
+
+.toast {
+    border: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .18);
+}
+
+.toast-exito {
+    background: #ECFDF3;
+    border-left: 6px solid var(--estado-aprobado) !important;
+}
+
+.toast-error {
+    background: #FEF2F2;
+    border-left: 6px solid var(--estado-reprobado) !important;
+}
+
+.modal-content {
+    border-radius: var(--radio);
+    border: 0;
+}
+
+/* ---------- Buscador y paginación ---------- */
+.barra-herramientas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.pagination .page-link {
+    color: var(--color-primario);
+    border-color: var(--color-borde);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--color-primario);
+    border-color: var(--color-primario);
+    color: #fff;
+}
+
+/* ---------- Gráfica de respaldo (si Chart.js no carga) ---------- */
+.barra-respaldo {
+    height: 12px;
+    background: #e5e9e3;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+    .barra-respaldo > div {
+        height: 100%;
+        background: var(--color-primario);
+    }
+
+/* ---------- Pie de página ---------- */
+.pie {
+    position: center;
+    bottom: 0;
+    width: 100%;
+    line-height: 60px;
+    color: var(--color-suave);
+    border-top: 1px solid var(--color-borde);
+    background: #fff;
+}
+
+/* ---------- Celular: sin scroll horizontal en la página ---------- */
+@media (max-width: 575.98px) {
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    .tarjeta-estadistica .valor {
+        font-size: 1.8rem;
+    }
+
+    .seccion-formulario {
+        padding: 1rem;
+    }
+}
+
+
+
+

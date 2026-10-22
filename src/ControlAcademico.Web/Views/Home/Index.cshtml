@@ -1,94 +1,69 @@
 @model ControlAcademico.Negocio.DashboardResumen
 @{
     ViewData["Title"] = "Inicio";
+    var etiquetas = System.Text.Json.JsonSerializer.Serialize(Model.InscritosPorCurso.Select(c => c.Curso));
+    var valores = System.Text.Json.JsonSerializer.Serialize(Model.InscritosPorCurso.Select(c => c.Inscritos));
+    var tarjetaEstudiantes = new ControlAcademico.Models.TarjetaEstadistica { Titulo = "Estudiantes", Valor = Model.Estudiantes, Icono = "bi-people-fill", Controlador = "Estudiantes", ClaseBorde = "borde-estudiantes" };
+    var tarjetaDocentes = new ControlAcademico.Models.TarjetaEstadistica { Titulo = "Docentes", Valor = Model.Docentes, Icono = "bi-person-workspace", Controlador = "Docentes", ClaseBorde = "borde-docentes" };
+    var tarjetaCursos = new ControlAcademico.Models.TarjetaEstadistica { Titulo = "Cursos", Valor = Model.Cursos, Icono = "bi-journal-bookmark-fill", Controlador = "Cursos", ClaseBorde = "borde-cursos" };
+    var tarjetaMatriculas = new ControlAcademico.Models.TarjetaEstadistica { Titulo = "Matrículas", Valor = Model.Matriculas, Icono = "bi-card-checklist", Controlador = "Matriculas", ClaseBorde = "borde-matriculas" };
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0">Panel de control académico</h1>
-    <a href="/swagger" class="btn btn-outline-primary btn-sm">Servicio web (Swagger)</a>
+@* Pantalla PRINCIPAL (dashboard): resumen del sistema con datos reales de la base de datos. *@
+<div class="barra-herramientas">
+    <div>
+        <h2 class="mb-0">Panel de control académico</h2>
+        <span class="text-muted">Resumen general del sistema</span>
+    </div>
+    <a href="/swagger" class="btn btn-outline-primary btn-sm"><i class="bi bi-braces"></i> Servicio web (Swagger)</a>
 </div>
 
+@* Cuatro tarjetas de estadística (parcial _TarjetaEstadistica). *@
 <div class="row g-3 mb-4">
     <div class="col-6 col-lg-3">
-        <a asp-controller="Estudiantes" asp-action="Index" class="text-decoration-none">
-            <div class="card border-start border-primary border-4 h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="text-muted">Estudiantes</div>
-                    <div class="display-6 text-dark">@Model.Estudiantes</div>
-                </div>
-            </div>
-        </a>
+        <partial name="_TarjetaEstadistica" model="tarjetaEstudiantes" />
     </div>
     <div class="col-6 col-lg-3">
-        <a asp-controller="Docentes" asp-action="Index" class="text-decoration-none">
-            <div class="card border-start border-success border-4 h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="text-muted">Docentes</div>
-                    <div class="display-6 text-dark">@Model.Docentes</div>
-                </div>
-            </div>
-        </a>
+        <partial name="_TarjetaEstadistica" model="tarjetaDocentes" />
     </div>
     <div class="col-6 col-lg-3">
-        <a asp-controller="Cursos" asp-action="Index" class="text-decoration-none">
-            <div class="card border-start border-warning border-4 h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="text-muted">Cursos</div>
-                    <div class="display-6 text-dark">@Model.Cursos</div>
-                </div>
-            </div>
-        </a>
+        <partial name="_TarjetaEstadistica" model="tarjetaCursos" />
     </div>
     <div class="col-6 col-lg-3">
-        <a asp-controller="Matriculas" asp-action="Index" class="text-decoration-none">
-            <div class="card border-start border-danger border-4 h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="text-muted">Matrículas</div>
-                    <div class="display-6 text-dark">@Model.Matriculas</div>
-                </div>
-            </div>
-        </a>
+        <partial name="_TarjetaEstadistica" model="tarjetaMatriculas" />
     </div>
 </div>
 
 <div class="row g-4">
     <div class="col-lg-7">
-        <div class="card shadow-sm h-100">
+        <div class="card h-100">
             <div class="card-body">
-                <h2 class="h5 mb-3">Inscritos por curso</h2>
+                <h2 class="h5 mb-3"><i class="bi bi-bar-chart-fill text-success me-2"></i>Inscritos por curso</h2>
                 @if (!Model.InscritosPorCurso.Any())
                 {
                     <p class="text-muted mb-0">Todavía no hay cursos registrados.</p>
                 }
                 else
                 {
-                    foreach (var curso in Model.InscritosPorCurso)
-                    {
-                        var porcentaje = curso.Inscritos * 100 / Model.MayorInscripcion;
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between">
-                                <span>@curso.Curso</span>
-                                <span class="text-muted">@curso.Inscritos</span>
-                            </div>
-                            <div class="progress" role="progressbar" aria-valuenow="@porcentaje" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar" style="width: @(porcentaje)%"></div>
-                            </div>
-                        </div>
-                    }
+                    <div style="position: relative; height: 300px;">
+                        @* Gráfica de barras: site.js la dibuja con Chart.js; los datos viajan en los atributos data-*. *@
+                        <canvas id="graficaInscritos" data-etiquetas="@etiquetas" data-valores="@valores"></canvas>
+                    </div>
                 }
             </div>
         </div>
     </div>
     <div class="col-lg-5">
-        <div class="card shadow-sm h-100">
+        <div class="card h-100">
             <div class="card-body">
-                <h2 class="h5 mb-3">Actividad reciente</h2>
+                <h2 class="h5 mb-3"><i class="bi bi-clock-history text-warning me-2"></i>Actividad reciente</h2>
                 @if (!Model.ActividadReciente.Any())
                 {
                     <p class="text-muted mb-0">Todavía no hay actividad registrada.</p>
                 }
                 else
                 {
+                    @* Últimas actividades; se guardan solas cada vez que se crea, edita o elimina algo. *@
                     <ul class="list-group list-group-flush">
                         @foreach (var actividad in Model.ActividadReciente)
                         {
@@ -103,3 +78,7 @@
         </div>
     </div>
 </div>
+
+@section Librerias {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+}
